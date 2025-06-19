@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Create New Session
+
+{% endblock title %}
+
+{% block content %}
+
+<section class="vh-100">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <form method="POST">
+                            {% csrf_token %}
+
+                            <div class="md-5 mt-md-4 pb-5">
+                                <h2 class="fw-bold mb-5">Create Session</h2>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" name="first_player" class="form-control form-control-lg border-5 border-danger" placeholder="First Player" />
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" name="second_player" class="form-control form-control-lg border-5 border-warning" placeholder="Second Player" />
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" name="third_player" class="form-control form-control-lg border-5 border-primary" placeholder="Third Player" />
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" name="fourth_player" class="form-control form-control-lg border-5 border-success" placeholder="Fourth Player" />
+                                </div>
+
+                                <div class="mt-5">
+                                    <h5>
+                                        <a href="{% url 'add_question' %}">Add a question</a>
+                                    </h5>
+                                </div>
+
+                                <div>
+                                    <h5>
+                                        <a href="{% url 'update_question' %}">Update a question</a>
+                                    </h5>
+                                </div>
+
+                                <button class="btn btn-outline-light btn-lg px-5 mt-3" type="submit">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

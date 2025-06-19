@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Create New Game
+
+{% endblock title %}
+
+{% block content %}
+
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <form method="POST">
+                            {% csrf_token %}
+
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <input type="submit" class="btn btn-danger text-white btn-sq-responsive" name="count" value="3 Questions">
+                                </div>
+                                <div class="col">
+                                    <input type="submit" class="btn btn-warning text-white btn-sq-responsive" name="count" value="5 Questions">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <input type="submit" class="btn btn-primary text-white btn-sq-responsive" name="count" value="7 Questions">
+                                </div>
+                                <div class="col">
+                                    <input type="submit" class="btn btn-success text-white btn-sq-responsive" name="count" value="8 Questions">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

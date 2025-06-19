@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+WINNER 👏
+
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        {% if not tie  %}
+                            <h2><span class="text-success h1">{{ winner }}</span> won the game 👏</h2>
+                        {% else %}
+                            <span class="text-warning h1">Tie</span>
+                        {% endif %}
+
+                        <h4 class="mt-4">
+                            <a href="{% url 'home' %}">Go Home</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let audio = new Audio("{% static 'sound/cheer.mp3' %}")
+    audio.play()
+</script>
+
+{% endblock content %}

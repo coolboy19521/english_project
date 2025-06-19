@@ -1,0 +1,392 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Wheel Of Fortune
+
+{% endblock title %}
+
+{% block content %}
+
+{% load static %}
+
+<dialog class="bg-dark">
+    <div class="card bg-dark text-white" style="border-radius: 1rem;">
+        <div class="card-body p-5 text-center">
+            <div class="md-5">
+                <div class="row mb-4">
+                    <div class="col">
+                        <button class="btn btn-danger text-white btn-sq-responsive" name="count" onclick="button(50)">50</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary text-white btn-sq-responsive" name="count" onclick="button(100)">100</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary text-white btn-sq-responsive" name="count" onclick="button(150)">150</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary text-white btn-sq-responsive" name="count" onclick="button(200)">200</button>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col">
+                        <button class="btn btn-success text-white btn-sq-responsive" name="count" onclick="button(1000)">1000</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-danger text-white btn-sq-responsive" name="count" onclick="button(500)">500</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary text-white btn-sq-responsive" name="count" onclick="document.querySelector('dialog').close(); lose_a_turn()">Lose A Turn</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary text-white btn-sq-responsive" name="count" onclick="button(600)">600</button>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col">
+                        <button class="btn btn-success text-white btn-sq-responsive" name="count" onclick="button(650)">650</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-success text-white btn-sq-responsive" name="count" onclick="button(550)">550</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-danger text-white btn-sq-responsive" name="count" onclick="button(10)">10</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-danger text-white btn-sq-responsive" name="count" onclick="button(800)">800</button>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col">
+                        <button class="btn btn-success text-white btn-sq-responsive" name="count" onclick="button(2000)">2000</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-success text-white btn-sq-responsive" name="count" onclick="button(60)">60</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-danger text-white btn-sq-responsive" name="count" onclick="button(1500)">1500</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-danger text-white btn-sq-responsive" name="count" onclick="document.querySelector('dialog').close(); bankrupt();">Bankrupt</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col">
+                        <button class="btn btn-success text-white btn-sq-responsive" name="count" onclick="button(10000)">10000</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-success text-white btn-sq-responsive" name="count" onclick="button(900)">900</button>
+                    </div>
+                    <div class="col"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</dialog>
+
+<section class="vh-100">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <div class="md-5 mt-md-4 pb-5 d-grid gap-2">
+                            <h1 class="mb-4"><span class="badge text-bg-secondary" id="timer">0 : 60</span></h1>
+                            <h2 class="fw-bold mb-5"><span id="question_id"></span>.  <span id="question-text"></span></h2>
+
+                            <button class="btn btn-outline-light fs-5" id="variant-a" onclick="check_correct(0)">first</button>
+                            <button class="btn btn-outline-light fs-5" id="variant-b" onclick="check_correct(1)">second</button>
+                            <button class="btn btn-outline-light fs-5" id="variant-c" onclick="check_correct(2)">third</button>
+                            <button class="btn btn-outline-light fs-5" id="variant-d" onclick="check_correct(3)">fourth</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div style="position: fixed; top:1%; left:1%;">
+    <div class="card bg-dark text-white border-5 border-danger" style="border-radius: 1rem;">
+        <div class="card-body">
+            <h1 id="player-1" class="player">{{ players.0 }}</h1>
+
+            <h4 class="m-0 score" id="score-0">0</h4>
+        </div>
+    </div>
+</div>
+
+<div style="position: fixed; top:1%; right:1%;">
+    <div class="card bg-dark text-white border-5 border-warning" style="border-radius: 1rem;">
+        <div class="card-body text-end">
+            <h1 id="player-2" class="player">{{ players.1 }}</h1>
+
+            <h4 class="m-0 score" id="score-1">0</h4>
+        </div>
+    </div>
+</div>
+
+{% if player_count == 3 %}
+
+    <div style="position: fixed; bottom:1%; left:1%;">
+        <div class="card bg-dark text-white border-5 border-primary" style="border-radius: 1rem;">
+            <div class="card-body text-start">
+                <h1 id="player-3" class="player">{{ players.2 }}</h1>
+
+                <h4 class="m-0 score" id="score-2">0</h4>
+            </div>
+        </div>
+    </div>
+
+{% elif player_count == 4 %}
+
+    <div style="position: fixed; bottom:1%; left:1%;">
+        <div class="card bg-dark text-white border-5 border-primary" style="border-radius: 1rem;">
+            <div class="card-body text-end">
+                <h1 id="player-3" class="player">{{ players.2 }}</h1>
+
+                <h4 class="m-0 score" id="score-2">0</h4>
+            </div>
+        </div>
+    </div>
+
+    <div style="position: fixed; bottom:1%; right:1%;">
+        <div class="card bg-dark text-white border-5 border-success" style="border-radius: 1rem;">
+            <div class="card-body text-end">
+                <h1 id="player-4" class="player">{{ players.3 }}</h1>
+
+                <h4 class="m-0 score" id="score-3">0</h4>
+            </div>
+        </div>
+    </div>
+
+{% endif %}
+
+<script>
+
+    let player_count = {{ player_count }}
+
+    let scores = Array(player_count).fill(0)
+
+    let count = {{ count }}
+    let idx = 0
+
+    let player = null
+    let point = null
+
+    let clicked = false
+
+    let question_text = document.querySelector('#question-text')
+
+    let question_id = document.querySelector('#question_id')
+    let variant_a = document.querySelector('#variant-a')
+    let variant_b = document.querySelector('#variant-b')
+    let variant_c = document.querySelector('#variant-c')
+    let variant_d = document.querySelector('#variant-d')
+    let timer = document.querySelector('#timer')
+
+    let scores_w = []
+    let players = []
+
+    for (let id = 0; id < player_count; id ++) {
+        players.push(document.querySelector(`#player-${id + 1}`))
+        scores_w.push(document.querySelector(`#score-${id}`))
+    }
+
+    let variants = [
+        variant_a,
+        variant_b,
+        variant_c,
+        variant_d
+    ]
+
+    let correct = null
+
+    let lose_a_turn = () => {
+        player.classList.remove('flush')
+
+        let audio = new Audio("{% static 'sound/fail.mp3' %}")
+        audio.play()
+
+        next()
+    }
+
+    let bankrupt = () => {
+        scores[(idx - 1) % player_count] = 0
+
+        player.classList.remove('flush')
+
+        let audio = new Audio("{% static 'sound/fail.mp3' %}")
+        audio.play()
+
+        next()
+    }
+
+    let fetch_questions = async () => {
+        let response = await fetch(`http://127.0.0.1:8000/api/questions/${count}`)
+        let questions = await response.json()
+
+        return questions
+    }
+
+    let sleep = (ms) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    let next = () => {
+        try {
+            if (idx < count) {
+                document.querySelector('dialog').showModal()
+            }
+        }
+        catch (err) {
+            return
+        }
+
+        if (idx < count) {
+            update()
+
+            player = players[idx % player_count]
+
+            player.classList.add('flush')
+            
+            questions.then((value) => {
+                question_text.innerHTML = value[idx]['question_text']
+                question_id.textContent = value[idx]['id']
+    
+                variant_a.innerHTML = value[idx]['variant_a']
+                variant_b.innerHTML = value[idx]['variant_b']
+                variant_c.innerHTML = value[idx]['variant_c']
+                variant_d.innerHTML = value[idx]['variant_d']
+    
+                correct = value[idx]['correct_answer']
+                timer.textContent = '0 : 60'
+            })
+
+            idx ++
+        } else {
+            open(`../winner/${def_winner()}`, '_self')
+        }
+    }
+
+    let update = () => {
+        for (let score_w = 0; score_w < player_count; score_w ++) {
+            scores_w[score_w].innerHTML = scores[score_w]
+        }
+    }
+
+    let check_correct = async (id) => {
+        if (!clicked) {
+            clicked = true
+
+            tmp_style = variants[id].classList.toString()
+
+            if (id === correct) {
+                variants[id].classList.add('btn-success', 'hover')
+                variants[id].classList.remove(
+                    'btn-outline-light'
+                )
+
+                variants[id].innerHTML += '👏'
+                scores[(idx - 1) % player_count] += point
+
+                let audio = new Audio("{% static 'sound/cheer.mp3' %}")
+                audio.play()
+            } else {
+                if (id != -1) {
+                    variants[id].classList.add('btn-danger')
+                    variants[id].classList.remove(
+                        'btn-outline-light'
+                    )
+
+                    variants[id].innerHTML += '😔'
+
+                    let audio = new Audio("{% static 'sound/fail.mp3' %}")
+                    audio.play()
+
+                    await sleep(1000)
+                }
+
+                variants[correct].classList.add('btn-success', 'hover')
+                variants[correct].classList.remove(
+                    'btn-outline-light'
+                )
+            }
+
+            await sleep(5000)
+
+            if (-1 != id) {
+                variants[id].classList = 'btn btn-outline-light fs-5'
+            }
+
+            variants[correct].classList = 'btn btn-outline-light fs-5'
+
+            player.classList.remove('flush')
+
+            clicked = false
+
+            next()
+        }
+    }
+
+    let def_winner = () => {
+        let index = 0
+        let max = 0
+        let count_max = 0
+
+        for (let id = 0; id < player_count; id ++) {
+            if (scores[id] > max) {
+                max = scores[id]
+                index = id
+            }
+        }
+
+        for (let id = 0; id < player_count; id ++) {
+            if (scores[id] === max) {
+                count_max ++
+            }
+        }
+
+        if (count_max > 1) {
+            return 69
+        }
+
+        return index
+    }
+
+    let time_go_down = async () => {
+        if (clicked) {
+            return;
+        }
+
+        let time = timer.textContent.split(' : ')
+        let minutes = time[1]
+        minutes --;
+        
+        if (minutes == 0) {
+            check_correct(-1)
+            return
+        }
+    
+        timer.textContent = `${time[0]} : ${minutes}`
+
+        await sleep(1000)
+
+        time_go_down()
+    }
+
+    let button = (new_point) => {
+        point = new_point
+        document.querySelector('dialog').close()
+        time_go_down()
+    }
+
+    let questions = fetch_questions()
+
+    next()
+
+</script>
+
+
+{% endblock content %}

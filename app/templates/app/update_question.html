@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Create New Session
+
+{% endblock title %}
+
+{% block content %}
+
+<section class="vh-100">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <form method="POST">
+                            {% csrf_token %}
+
+                            <div class="md-5 mt-md-4 pb-5">
+                                <h2 class="fw-bold mb-5">Update Question</h2>
+
+                                <!-- <select class="form-select form-select-lg mb-4 border-5 border-secondary" name="id" onchange="load_info()">
+                                    <option selected>Open this select menu</option>
+                                </select> -->
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" name="id" type="number" class="form-control form-control-lg border-5 border-secondary" placeholder="Question Id" oninput="load_info()" />
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" id="question_text" name="question_text"  class="form-control form-control-lg border-5 border-secondary" placeholder="Question Text" />
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" id="variant_a" name="variant_a"  class="form-control form-control-lg border-5 border-secondary" placeholder="Variant A" />
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" id="variant_b" name="variant_b" class="form-control form-control-lg border-5 border-secondary" placeholder="Varinat B" />
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" id="variant_c" name="variant_c" class="form-control form-control-lg border-5 border-secondary" placeholder="Variant C" />
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" id="variant_d" name="variant_d" class="form-control form-control-lg border-5 border-secondary" placeholder="Variant D" />
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" id="correct_answer" name="correct_answer" class="form-control form-control-lg border-5 border-secondary" placeholder="Correct Answer (A, B, C, D)" />
+                                </div>
+
+                                <div class="mt-5">
+                                    <h5>
+                                        <a href="{% url 'home' %}">Go to home page</a>
+                                    </h5>
+                                </div>
+
+                                <button class="btn btn-outline-light btn-lg px-5 mt-3" type="submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let id = document.querySelector('[name=id]')
+    let select_options = []
+
+    let variants = ['A', 'B', 'C', 'D']
+
+    let question_text = document.querySelector('#question_text')
+
+    let variant_a = document.querySelector('#variant_a')
+    let variant_b = document.querySelector('#variant_b')
+    let variant_c = document.querySelector('#variant_c')
+    let variant_d = document.querySelector('#variant_d')
+
+    let correct_answer = document.querySelector('#correct_answer')
+
+    let fetch_questions = async () => {
+        let response = await fetch(`http://127.0.0.1:8000/api/questions`)
+        let questions = await response.json()
+
+        return questions
+    }
+
+    let load_info = () => {
+        let option_selected = id.value
+        let option_found = false
+
+        fetch_questions().then((values) => {
+            values.forEach((value) => {
+                if (value['id'] == option_selected) {
+                    question_text.value = value['question_text']
+                    
+                    variant_a.value = value['variant_a']
+                    variant_b.value = value['variant_b']
+                    variant_c.value = value['variant_c']
+                    variant_d.value = value['variant_d']
+                    
+                    correct_answer.value = variants[value['correct_answer']]
+                    option_found = true
+                }
+            })
+        })
+    }
+</script>
+
+{% endblock content %}
